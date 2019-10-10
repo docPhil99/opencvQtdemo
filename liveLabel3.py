@@ -12,17 +12,22 @@ class VideoThread(QThread):
 
     def __init__(self):
         super().__init__()
-        self.run_flag = True
+        self._run_flag = True
 
     def run(self):
         # capture from web cam
         cap = cv2.VideoCapture(0)
-        while self.run_flag:
+        while self._run_flag:
             ret, cv_img = cap.read()
             if ret:
                 self.change_pixmap_signal.emit(cv_img)
         # shut down capture system
         cap.release()
+
+    def stop(self):
+        """Sets run flag to False and waits for thread to finish"""
+        self._run_flag = False
+        self.wait()
 
 
 class App(QWidget):
@@ -52,8 +57,7 @@ class App(QWidget):
         self.thread.start()
 
     def closeEvent(self, event):
-        self.thread.run_flag = False
-        self.thread.join()
+        self.thread.stop()
         event.accept()
 
 
