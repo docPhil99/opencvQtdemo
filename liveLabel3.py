@@ -46,6 +46,7 @@ class App(QWidget):
         vbox = QVBoxLayout()
         vbox.addWidget(self.image_label)
         vbox.addWidget(self.textLabel)
+        
         # set the vbox layout as the widgets layout
         self.setLayout(vbox)
 
